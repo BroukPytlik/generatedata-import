@@ -24,14 +24,13 @@ output_tables={}
 def create_sql_insert(table_name,status,account_id,configuration_name,content, rows):
 	return """INSERT INTO `%s` (status, account_id, date_created, last_updated, configuration_name, content, num_rows_generated)
 	VALUES ('%s', %d, '%s', '%s', '%s', '%s', %d);
-	
 
 """ % (
-			
 		table_name,
 		status, account_id, "2014-01-01 00:00:00", "2014-01-01 00:00:00", 
 		configuration_name, content, rows
 	)
+	
 
 def get_database(server, user, password, db):
 
@@ -65,7 +64,6 @@ def get_database(server, user, password, db):
 	connection.close()
 
 
-
 def main():
 	parser = argparse.ArgumentParser(description=\
 			"My quick andn dirty solution for importing mysql databases"
@@ -76,12 +74,12 @@ def main():
 	parser.add_argument('-d', '--db',required=1)
 	args = parser.parse_args()
 
-
 	get_database(args.server, args.user, args.password, args.db)
 
 	for col in output_tables:
 		print output_tables[col]
 		pass	
+
 
 def generatedata_get_type(mysql_type, is_pk):
 
@@ -102,6 +100,7 @@ def generatedata_get_type(mysql_type, is_pk):
 		return dic[mysql_type]
 	else: # default
 		return "data-type-NumberRange"
+
 
 def generatedata_get_type_data(mysql_type, is_pk):
 
@@ -128,11 +127,13 @@ def generatedata_get_type_data(mysql_type, is_pk):
 	else:
 		return {"rangeMin":"0","rangeMax":"50"}
 
+
 def generatedata_json_get_column(name, type, is_pk):
 	column = {'title': name, 
 		'dataType': generatedata_get_type(type, is_pk),
 		'data':generatedata_get_type_data(type, is_pk)}
 	return column
+
 
 def generatedata_content(table_name, columns_list):
 	return {
